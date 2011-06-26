@@ -1,0 +1,77 @@
+#class Plane3D(object):
+    #@classmethod
+    #def throughPoints(cls,p1, p2, p3):
+        #"""Creates a plane defined by three points"""
+        #pass
+    #@classmethod
+    #def fromPointAndNormal(cls, point, line):
+        #"""Creates a plane defined from a point and a normal line"""
+        #pass
+#
+    #def __init__(self):
+        #raise NotImplemented
+    #def normalThrough(self, point):
+        #"""Returns the normal line to the plane passing through a given point"""
+        #raise NotImplemented
+#
+    #def hasPoint(self, point, tolerance=1e-8):
+        #raise NotImplemented
+#
+
+#def pointFromLine(line_first, line_second, point):
+#    line_first_arr = numpy.array(line_first)
+#    line_second_arr = numpy.array(line_second)
+#    point_arr = numpy.array(point)
+#
+#    numerator = norm( numpy.cross( (line_second_arr - line_first_arr), (line_first_arr - point) ) )
+#    denominator = norm(line_second_arr - line_first_arr)
+#    return numerator / denominator
+
+#def orthogonal(line_first, line_second, point):
+#    line_first_arr = numpy.array(line_first)
+#    line_second_arr = numpy.array(line_second)
+#    point_arr = numpy.array(point)
+#
+#    t = - (numpy.dot(line_first_arr - point_arr, line_second_arr - line_first_arr)) / norm( line_second_arr-line_first_arr)**2
+#
+#    minimum = line_first_arr + ( line_second_arr-line_first_arr) * t
+#    return point_arr - minimum
+
+
+def mirror(entity, plane):
+    """mirrors an entity (point, line, plane) using "plane" as a mirror"""
+    raise NotImplemented
+
+def translate(entity, direction, amount):
+    raise NotImplemented
+
+
+def translate(self,x,y,z):
+    self.__value[0]=self.__value[0]+x
+    self.__value[1]=self.__value[1]+y
+    self.__value[2]=self.__value[2]+z
+def rotateX(self,ang):
+    mat=[[1,0,0],[0,1,0],[0,0,1]]
+    mat[1][1]=math.cos(ang)
+    mat[1][2]=-math.sin(ang)
+    mat[2][1]=math.sin(ang)
+    mat[2][2]=math.cos(ang)
+    self.matProd(mat)
+def rotateY(self,ang):
+    mat=[[1,0,0],[0,1,0],[0,0,1]]
+    mat[0][0]=math.cos(ang)
+    mat[0][2]=-math.sin(ang)
+    mat[2][0]=math.sin(ang)
+    mat[2][2]=math.cos(ang)
+    self.matProd(mat)
+def rotateZ(self,ang):
+    mat=[[1,0,0],[0,1,0],[0,0,1]]
+    mat[0][0]=math.cos(ang)
+    mat[0][1]=-math.sin(ang)
+    mat[1][0]=math.sin(ang)
+    mat[1][1]=math.cos(ang)
+    self.matProd(mat)
+
+
+#def normalize(v):
+#    return v/distance.norm(v)

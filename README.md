@@ -42,14 +42,18 @@ Vector3D(2.73409943959, 0.879770168124, -0.642337009638)
 
 ### multiplication
 
-using `*` with a number or vector
+using `*` with a number or vector. With antoher vector this returns the dot
+product.
 
 ```python
->>> from core import Vector3D
->>> v1 = Vector3D(0.0, 2.0, 0.0)
->>> v2 = v1 * 0.5
->>> v2
-Vector3D(0.0, 1.0, 0.0)
+>>> v2 = Vector3D(-4.0, 1.2, 3.5)
+>>> v1 = Vector3D(2.0, 1.1, 0.0)
+>>> v2 - v1
+Vector3D(-6.0, 0.1, 3.5)
+>>> v2 * 1.25
+Vector3D(-5.0, 1.5, 4.375)
+>>> v2 * v1 #dot product
+-6.6799999999999997
 ```
 
 ### Vector length get and set

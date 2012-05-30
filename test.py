@@ -25,8 +25,16 @@ v4
 # this is a vector of length 0
 # so it's length can't be adjusted
 v4.length = 1.0
-p1 = Point3D(*v3)
+
+v2 = Vector3D(-4.0, 1.2, 3.5)
+v1 = Vector3D(2.0, 1.1, 0.0)
+v2 - v1
+v2 * 1.25
+v2 * v1 #dot product
+
+p1 = Point3D(-2.2, -0.5, 0.0034)
 p2 = Point3D(3.45, 0.01, -2004.665)
+p1.distanceTo(p2)
 p1.distanceTo(p2)
 p2.vectorTo(p1)
 p1 - p2

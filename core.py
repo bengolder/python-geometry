@@ -318,13 +318,24 @@ class Vector3D(object):
             raise NotImplementedError
 
     def __sub__(self, other):
-        """Subtract a vector or number"""
+        """Subtract a vector or number
+            >>> v2 = Vector3D(-4.0, 1.2, 3.5)
+            >>> v1 = Vector3D(2.0, 1.1, 0.0)
+            >>> v2 - v1
+            Vector3D(-6.0, 0.1, 3.5)
+        """
         return self.__add__(other * -1)
 
     def __mul__(self, other):
         """if with a number, then scalar multiplication of the vector,
             if with a Vector, then dot product, I guess for now, because
             the asterisk looks more like a dot than an X.
+            >>> v2 = Vector3D(-4.0, 1.2, 3.5)
+            >>> v1 = Vector3D(2.0, 1.1, 0.0)
+            >>> v2 * 1.25
+            Vector3D(-5.0, 1.5, 4.375)
+            >>> v2 * v1 #dot product
+            -6.6799999999999997
         """
         if isinstance(other, numbers.Number):
             # scalar multiplication
@@ -344,11 +355,33 @@ class Point3D(Vector3D):
         return 'Point3D(%s, %s, %s)' % self._t()
 
     def distanceTo(self, other):
+        """Find the distance between this point and another.
+            >>> p1 = Point3D(-2.2, -0.5, 0.0034)
+            >>> p2 = Point3D(3.45, 0.01, -2004.665)
+            >>> p1.distanceTo(p2)
+            2004.676426897508
+        """
         return (other - self).length
 
     def vectorTo(self, other):
+        """Find the vector to another point.
+            >>> p1 = Point3D(-2.2, -0.5, 0.0034)
+            >>> p2 = Point3D(3.45, 0.01, -2004.665)
+            >>> p1.distanceTo(p2)
+            2004.676426897508
+            >>> p1.distanceTo(p2)
+            2004.676426897508
+            >>> p2.vectorTo(p1)
+            Vector3D(-5.65, -0.51, 2004.6684)
+            >>> p1 - p2
+            Vector3D(-5.65, -0.51, 2004.6684)
+        """
         return other - self
 
+class Line(object):
+    """An infinite line.
+    """
+    pass
 
 WorldX = Vector3D(1.0, 0.0, 0.0)
 WorldY = Vector3D(0.0, 1.0, 0.0)

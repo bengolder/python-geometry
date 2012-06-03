@@ -106,6 +106,9 @@ def isRoughlyZero(number):
 # http://stackoverflow.com/questions/4028889/floating-point-equality-in-python
 # http://stackoverflow.com/questions/3049101/floating-point-equality-in-python-and-in-general
 
+
+
+
 class Vector3D(object):
     """A 3D vector object"""
 
@@ -113,9 +116,31 @@ class Vector3D(object):
         for arg in (x, y, z):
             if not isinstance(arg, numbers.Number):
                 raise TypeError
-        self.x = x
-        self.y = y
-        self.z = z
+        # coords is the essence of the data structure. It's immutable and
+        # iterable, allowing us to iterate over the values as well as providing
+        # a little bit of protection from accidentally changing the values see
+        # `classTest` in tests to understand more of the reasoning here.
+        self.coords = (x, y, z)
+    # defining x, y, and z like this to allow for the coords to remain a
+    # non-mutable iterable.
+    @property
+    def x(self):
+        return self[0]
+    @x.setter
+    def x(self, number):
+        self.coords = (number, self[1], self[2])
+    @property
+    def y(self):
+        return self[1]
+    @y.setter
+    def y(self, number):
+        self.coords = (self[0], number, self[2])
+    @property
+    def z(self):
+        return self[2]
+    @z.setter
+    def z(self, number):
+        self.coords = (self[0], self[1], number)
 
     @property
     def length(self):
@@ -124,6 +149,8 @@ class Vector3D(object):
             >>> v.length
             2.2360679774997898
         """
+        # iterate through the coordinates, square each, and return the root of
+        # the sum
         return math.sqrt(sum(n**2 for n in self))
 
     @length.setter
@@ -136,11 +163,12 @@ class Vector3D(object):
             >>> v
             Vector3D(-0.0, -3.2995419076, -1.6497709538)
         """
+        # depends on normalized() and __mult__
+        # create a vector as long as the number
         v = self.normalized() * number
+        # copy it
         self.match(v)
 
-    def __repr__(self):
-        return 'Vector3D(%s, %s, %s)' % self._t()
 
     def normalize(self):
         """edits vector in place to amplitude 1.0 and then returns self
@@ -151,6 +179,7 @@ class Vector3D(object):
             >>> v
             Vector3D(-0.0, -0.894427191, -0.4472135955)
         """
+        # depends on normalized and match
         self.match(self.normalized())
         return self
 
@@ -180,34 +209,22 @@ class Vector3D(object):
             >>> v
             Vector3D(2.0, 1.0, 2.2)
         """
+        # this basically just makes a new vector and uses it's coordinates to
+        # reset the coordinates of this one.
         if isinstance(other, Vector3D):
-            self.x = other.x
-            self.y = other.y
-            self.z = other.z
+            self.coords = other.coords
         elif isinstance(other, dict):
-            self.x = other['x']
-            self.y = other['y']
-            self.z = other['z']
-        else:
-            for i, n in enumerate(other):
-                if i==0:
-                    self.x = n
-                elif i==1:
-                    self.y = n
-                elif i==2:
-                    self.z = n
+            self.coords = (other['x'], other['y'], other['z'])
+        else: # assume it is some other iterable
+            self.coords = tuple(other[:3])
 
-    def _t(self):
-        """return vector as a tuple"""
-        return (self.x, self.y, self.z)
-
-    def _l(self):
+    def asList(self):
         """return vector as a list"""
-        return [self.x, self.y, self.z]
+        return [c for c in self]
 
-    def _d(self):
+    def asDict(self):
         """return dictionary representation of the vector"""
-        return dict( zip( list('xyz'), self._t() ) )
+        return dict( zip( list('xyz'), self.coords ) )
 
     def __getitem__(self, key):
         """Treats the vector as a tuple or dict for indexes and slicing.
@@ -224,13 +241,13 @@ class Vector3D(object):
         """
         # key index
         if isinstance(key, int):
-            return self._t().__getitem__(key)
+            return self.coords[key]
         # dictionary
         elif key in ('x','y','z'):
-            return self._d().__getitem__(key)
+            return self.asDict()[key]
         # slicing
         elif isinstance(key, type(slice(1))):
-            return self._t().__getitem__(key)
+            return self.coords.__getitem__(key)
         else:
             raise KeyError
 
@@ -248,19 +265,19 @@ class Vector3D(object):
         if not isinstance(value, numbers.Number):
             raise ValueError
         if key in ('x','y','z'):
-            d = self._d()
+            d = self.asDict()
             d.__setitem__(key, value)
             self.match(d)
         elif key in (0,1,2):
-            l = self._l()
+            l = self.asList()
             l.__setitem__(key, value)
             self.match(l)
         else:
             raise KeyError
 
     def __iter__(self):
-        """For iterating, the vector is represented as a tuple."""
-        return self._t().__iter__()
+        """For iterating, the vectors coordinates are represented as a tuple."""
+        return self.coords.__iter__()
 
     ## Time for some math
 
@@ -284,13 +301,14 @@ class Vector3D(object):
             >>> v1.cross(v)
             Vector3D(118.792523292, 5.0, -10.0)
         """
+        # I hope I did this right
         x = (self[1] * other[2]) - (self[2] * other[1])
         y = (self[2] * other[0]) - (self[0] * other[2])
         z = (self[0] * other[1]) - (self[1] * other[0])
         return Vector3D(x, y, z)
 
     def __add__(self, other):
-        """we want to add single numbers as a way of multiplying the length of the
+        """we want to add single numbers as a way of changing the length of the
         vector, while it would be nice to be able to do vector addition with
         other vectors.
             >>> from core import Vector3D
@@ -338,12 +356,15 @@ class Vector3D(object):
             -6.6799999999999997
         """
         if isinstance(other, numbers.Number):
-            # scalar multiplication
+            # scalar multiplication for numbers
             return Vector3D( *((n * other) for n in self))
 
         elif isinstance(other, Vector3D):
-            # dot product
+            # dot product for other vectors
             return self.dot(other)
+
+    def __repr__(self):
+        return 'Vector3D%s' % self.coords
 
 class Point3D(Vector3D):
     """Works like a Vector3D. I might add some point specific methods.
@@ -352,7 +373,7 @@ class Point3D(Vector3D):
         super(Point3D, self).__init__(*args, **kwargs)
 
     def __repr__(self):
-        return 'Point3D(%s, %s, %s)' % self._t()
+        return 'Point3D%s' % self.coords
 
     def distanceTo(self, other):
         """Find the distance between this point and another.
@@ -378,10 +399,60 @@ class Point3D(Vector3D):
         """
         return other - self
 
-class Line(object):
-    """An infinite line.
+class PointSet(object):
+    """This class is meant to hold a set of *unique* points.
+    It enforces this using python's built in `set` type. But points may still
+    be within some tolerance of each other.
+
+    In general, this class should be preferred to PointList because many
+    geometric algorithms will not assume duplicate points and could produce
+    invalid results (such as 0 length edges, collapsed faces, etc) if run on
+    points wiht duplicates.
+
+    Basically this provides hooks to using a python 'set' containing tuples of
+    the point coordinates.
+
+    This should actually be an ordered set, not just a set. I'm not sure how
+    much it matters though if the points can be looked up by their coordinates
+    so easily.
+
+    Perhaps the core set can be defined by a list and a dictionary. __iter__
+    would call on the list, while one would be able to look up the hashed
+    coordinate tuples as dictionary keys to get their index.
+
+    I like this list/dictionary combo, because even though what I would truly
+    want is an ordered set, OrderedSets as a class aren't introduced until
+    Python 3.0 or maybe 2.7 (not sure). Ideally this library would be
+    compatible with Python versions at least as early as 2.6 and hopefully 2.4
+    as well.
     """
-    pass
+    def __init__(self, points=None):
+        # can be initialized with an empty set.
+        # this set needs to contain tuples of point coords
+        # and then extend and manage the use of that set
+        if not points:
+            self.pointList = []
+            self.pointDict = {}
+        else:
+            # parse the points to create the pointList and pointDict
+            # we want to be able to accept points as tuples, as lists, as
+            # Point3D objects, and as Vector3D objects. I guess if I add them
+            # as iterables, that would be the simplest.
+            raise NotImplementedError
+
+    @property
+    def points(self):
+        # go through the list and get each tuple as Point3D object
+        return [Point3D(*point) for point in pointList]
+
+    @points.setter
+    def points(self, value):
+        # reset the pointList and pointDict objects
+        raise NotImplementedError
+
+
+
+
 
 WorldX = Vector3D(1.0, 0.0, 0.0)
 WorldY = Vector3D(0.0, 1.0, 0.0)

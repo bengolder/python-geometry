@@ -370,6 +370,25 @@ class Vector3D(object):
             # dot product for other vectors
             return self.dot(other)
 
+    def __hash__(self):
+        """This method provides a hashing value that is the same hashing value
+        returned by the vector's coordinate tuple. This allows for testing for
+        equality between vectors and tuples, as well as between vectors.
+
+        Two vector instances (a and b) with the same coordinates would return True
+        when compared for equality: a == b, a behavior that I would love to
+        have, and which would seem very intuitive.
+
+        They would also return true when compared for equality with a tuple
+        equivalent to their coordinates. My hope is that this will greatly aid
+        in filtering duplicate points where necessary - something I presume
+        many geometry algorithms will need to look out for.
+
+        I'm not sure it is a bad idea, but I intend this class to basically be a
+        tuple of floats wrapped with additional functionality.
+        """
+        return self.coords.__hash__()
+
     def __repr__(self):
         return 'Vector3D%s' % self.coords
 

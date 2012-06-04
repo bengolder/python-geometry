@@ -110,7 +110,14 @@ def isRoughlyZero(number):
 
 
 class Vector3D(object):
-    """A 3D vector object"""
+    """A 3D vector object
+
+    Perhaps these can be hashable if calling __hash__ returns a hash of a tuple
+    of a vector's coordinates. That would be close to what I'm looking for:
+    basically an object that for all intents and purposes can be treated like a
+    tuple of floats, but which has many additional methods and hooks for
+    functionality.
+    """
 
     def __init__(self, x=0.0, y=0.0, z=0.0):
         for arg in (x, y, z):
@@ -431,8 +438,8 @@ class PointSet(object):
         # this set needs to contain tuples of point coords
         # and then extend and manage the use of that set
         if not points:
-            self.pointList = []
-            self.pointDict = {}
+            self.coordList = []
+            self.coordDict = {}
         else:
             # parse the points to create the pointList and pointDict
             # we want to be able to accept points as tuples, as lists, as
@@ -443,13 +450,22 @@ class PointSet(object):
     @property
     def points(self):
         # go through the list and get each tuple as Point3D object
-        return [Point3D(*point) for point in pointList]
+        return [Point3D(*c) for c in self.coordList]
 
     @points.setter
     def points(self, value):
         # reset the pointList and pointDict objects
         raise NotImplementedError
 
+    @property
+    def coords(self):
+        # go through the list and get each tuple as Point3D object
+        return self.coordList
+
+    @coords.setter
+    def coords(self, value):
+        # reset the coordList and pointDict objects
+        raise NotImplementedError
 
 
 

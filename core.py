@@ -8,16 +8,16 @@ use.
 
 Here's some examples:
 
-    >>> from core import Vector3D, Point3D
+    >>> from core import Vector3d, Point3d
     >>> # test add
-    ... v = Vector3D(0.0, 1.0, 2.0)
+    ... v = Vector3d(0.0, 1.0, 2.0)
     >>> v1 = v + 1
     >>> v1
-    Vector3D(0.0, 1.4472135955, 2.894427191)
+    Vector3d(0.0, 1.4472135955, 2.894427191)
     >>> v1.length - v.length
     0.99999999999999956
     >>>
-    >>> v1 = Vector3D(0.0, 2.0, 1.0)
+    >>> v1 = Vector3d(0.0, 2.0, 1.0)
     >>> v1.length
     2.2360679774997898
     >>> v2 = v1 + 4
@@ -25,9 +25,9 @@ Here's some examples:
     6.2360679774997889
     >>> v3 = v1 + -7
     >>> v1 + v3
-    Vector3D(0.0, -2.260990337, -1.1304951685)
+    Vector3d(0.0, -2.260990337, -1.1304951685)
     >>> v1 - v2
-    Vector3D(0.0, -3.577708764, -1.788854382)
+    Vector3d(0.0, -3.577708764, -1.788854382)
     >>> v1 * v3
     -10.652475842498529
     >>> v3[0]
@@ -39,13 +39,13 @@ Here's some examples:
     >>> v3[-1]
     -2.1304951684997055
     >>> v2
-    Vector3D(0.0, 5.577708764, 2.788854382)
+    Vector3d(0.0, 5.577708764, 2.788854382)
     >>> v3
-    Vector3D(0.0, -4.260990337, -2.1304951685)
+    Vector3d(0.0, -4.260990337, -2.1304951685)
     >>> v4 = v3.cross(v2)
     >>> # v3 and v2 point in the same direction
     ... v4
-    Vector3D(0.0, -0.0, 0.0)
+    Vector3d(0.0, -0.0, 0.0)
     >>> # this is a vector of length 0
     ... # so it's length can't be adjusted
     ... v4.length = 1.0
@@ -56,14 +56,14 @@ Here's some examples:
       File "core.py", line 147, in normalized
         raise ZeroDivisionError
     ZeroDivisionError
-    >>> p1 = Point3D(*v3)
-    >>> p2 = Point3D(3.45, 0.01, -2004.665)
+    >>> p1 = Point3d(*v3)
+    >>> p2 = Point3d(3.45, 0.01, -2004.665)
     >>> p1.distanceTo(p2)
     2002.5420312440888
     >>> p2.vectorTo(p1)
-    Vector3D(-3.45, -4.270990337, 2002.53450483)
+    Vector3d(-3.45, -4.270990337, 2002.53450483)
     >>> p1 - p2
-    Vector3D(-3.45, -4.270990337, 2002.53450483)
+    Vector3d(-3.45, -4.270990337, 2002.53450483)
 
 First development target: intersections!!
 
@@ -109,8 +109,8 @@ def isRoughlyZero(number):
 
 
 
-class Vector3D(object):
-    """A 3D vector object
+class Vector3d(object):
+    """A 3d vector object
 
     Perhaps these can be hashable if calling __hash__ returns a hash of a tuple
     of a vector's coordinates. That would be close to what I'm looking for:
@@ -118,112 +118,57 @@ class Vector3D(object):
     tuple of floats, but which has many additional methods and hooks for
     functionality.
     """
-
     def __init__(self, x=0.0, y=0.0, z=0.0):
-        for arg in (x, y, z):
-            if not isinstance(arg, numbers.Number):
-                raise TypeError, "Can't create use a %s to get coordinates" % type(arg)
         # coords is the essence of the data structure. It's immutable and
         # iterable, allowing us to iterate over the values as well as providing
         # a little bit of protection from accidentally changing the values see
         # `classTest` in tests to understand more of the reasoning here.
         self.coords = (x, y, z)
-    # defining x, y, and z like this to allow for the coords to remain a
-    # non-mutable iterable.
-    @property
-    def x(self):
-        return self[0]
-    @x.setter
-    def x(self, number):
-        self.coords = (number, self[1], self[2])
-    @property
-    def y(self):
-        return self[1]
-    @y.setter
-    def y(self, number):
-        self.coords = (self[0], number, self[2])
-    @property
-    def z(self):
-        return self[2]
-    @z.setter
-    def z(self, number):
-        self.coords = (self[0], self[1], number)
+        self.x = x
+        self.y = y
+        self.z = z
 
     @property
     def length(self):
         """get the vector length / amplitude
-            >>> v = Vector3D(0.0, 2.0, 1.0)
+            >>> v = Vector3d(0.0, 2.0, 1.0)
             >>> v.length
             2.2360679774997898
         """
-        # iterate through the coordinates, square each, and return the root of
-        # the sum
+        # only calculate the length if asked to.
         return math.sqrt(sum(n**2 for n in self))
 
-    @length.setter
-    def length(self, number):
-        """set the vector amplitude
-            >>> v = Vector3D(0.0, 2.0, 1.0)
-            >>> v.length
-            2.2360679774997898
-            >>> v.length = -3.689
-            >>> v
-            Vector3D(-0.0, -3.2995419076, -1.6497709538)
-        """
+    def toLength(self, number):
+        """Get a parallel vector with the input amplitude."""
         # depends on normalized() and __mult__
         # create a vector as long as the number
-        v = self.normalized() * number
-        # copy it
-        self.match(v)
+        return self.normalized() * number
 
+    def toX(self, number):
+        """For getting a copy of the same vector but with a new x value"""
+        return Vector3d(number, self[1], self[2])
 
-    def normalize(self):
-        """edits vector in place to amplitude 1.0 and then returns self
-            >>> v
-            Vector3D(-0.0, -3.2995419076, -1.6497709538)
-            >>> v.normalize()
-            Vector3D(-0.0, -0.894427191, -0.4472135955)
-            >>> v
-            Vector3D(-0.0, -0.894427191, -0.4472135955)
-        """
-        # depends on normalized and match
-        self.match(self.normalized())
-        return self
+    def toY(self, number):
+        """For getting a copy of the same vector but with a new y value"""
+        return Vector3d(self[0], number, self[2])
+
+    def toZ(self, number):
+        """For getting a copy of the same vector but with a new z value"""
+        return Vector3d(self[0], self[1], number)
 
     def normalized(self):
         """just returns the normalized version of self without editing self in
         place.
             >>> v.normalized()
-            Vector3D(0.0, 0.894427191, 0.4472135955)
+            Vector3d(0.0, 0.894427191, 0.4472135955)
             >>> v
-            Vector3D(0.0, 3.2995419076, 1.6497709538)
+            Vector3d(0.0, 3.2995419076, 1.6497709538)
         """
         # think how important float accuracy is here!
         if isRoughlyZero(sum(n**2 for n in self)):
             raise ZeroDivisionError
         else:
             return self * (1 / self.length)
-
-    def match(self, other):
-        """sets the vector to something, either another vector,
-        a dictionary, or an iterable.
-        If an iterable, it ignores everything
-        beyond the first 3 items.
-        If a dictionary, it only uses keys 'x','y', and 'z'
-            >>> v
-            Vector3D(0.0, 3.2995419076, 1.6497709538)
-            >>> v.match({'x':2.0, 'y':1.0, 'z':2.2})
-            >>> v
-            Vector3D(2.0, 1.0, 2.2)
-        """
-        # this basically just makes a new vector and uses it's coordinates to
-        # reset the coordinates of this one.
-        if isinstance(other, Vector3D):
-            self.coords = other.coords
-        elif isinstance(other, dict):
-            self.coords = (other['x'], other['y'], other['z'])
-        else: # assume it is some other iterable
-            self.coords = tuple(other[:3])
 
     def asList(self):
         """return vector as a list"""
@@ -236,7 +181,7 @@ class Vector3D(object):
     def __getitem__(self, key):
         """Treats the vector as a tuple or dict for indexes and slicing.
             >>> v
-            Vector3D(2.0, 1.0, 2.2)
+            Vector3d(2.0, 1.0, 2.2)
             >>> v[0]
             2.0
             >>> v[-1]
@@ -246,41 +191,12 @@ class Vector3D(object):
             >>> v['y']
             1.0
         """
-        # key index
-        if isinstance(key, int):
-            return self.coords[key]
         # dictionary
-        elif key in ('x','y','z'):
-            return self.asDict()[key]
-        # slicing
-        elif isinstance(key, type(slice(1))):
-            return self.coords.__getitem__(key)
-        else:
-            raise KeyError
-
-    def __setitem__(self, key, value):
-        """Treats the vector as a list or dictionary for setting values.
-            >>> v
-            Vector3D(0.0, 1.20747670785, 2.4149534157)
-            >>> v[0] = 5
-            >>> v
-            Vector3D(5, 1.20747670785, 2.4149534157)
-            >>> v['z'] = 60.0
-            >>> v
-            Vector3D(5, 1.20747670785, 60.0)
-        """
-        if not isinstance(value, numbers.Number):
-            raise ValueError
         if key in ('x','y','z'):
-            d = self.asDict()
-            d.__setitem__(key, value)
-            self.match(d)
-        elif key in (0,1,2):
-            l = self.asList()
-            l.__setitem__(key, value)
-            self.match(l)
+            return self.asDict()[key]
+        # slicing and index calls
         else:
-            raise KeyError
+            return self.coords.__getitem__(key)
 
     def __iter__(self):
         """For iterating, the vectors coordinates are represented as a tuple."""
@@ -291,9 +207,9 @@ class Vector3D(object):
     def dot(self, other):
         """Gets the dot product of this vector and another.
             >>> v
-            Vector3D(5, 1.20747670785, 60.0)
+            Vector3d(5, 1.20747670785, 60.0)
             >>> v1
-            Vector3D(0.0, 2.0, 1.0)
+            Vector3d(0.0, 2.0, 1.0)
             >>> v1.dot(v)
             62.41495341569977
         """
@@ -302,32 +218,32 @@ class Vector3D(object):
     def cross(self, other):
         """Gets the cross product between two vectors
             >>> v
-            Vector3D(5, 1.20747670785, 60.0)
+            Vector3d(5, 1.20747670785, 60.0)
             >>> v1
-            Vector3D(0.0, 2.0, 1.0)
+            Vector3d(0.0, 2.0, 1.0)
             >>> v1.cross(v)
-            Vector3D(118.792523292, 5.0, -10.0)
+            Vector3d(118.792523292, 5.0, -10.0)
         """
         # I hope I did this right
         x = (self[1] * other[2]) - (self[2] * other[1])
         y = (self[2] * other[0]) - (self[0] * other[2])
         z = (self[0] * other[1]) - (self[1] * other[0])
-        return Vector3D(x, y, z)
+        return Vector3d(x, y, z)
 
     def __add__(self, other):
         """we want to add single numbers as a way of changing the length of the
         vector, while it would be nice to be able to do vector addition with
         other vectors.
-            >>> from core import Vector3D
+            >>> from core import Vector3d
             >>> # test add
-            ... v = Vector3D(0.0, 1.0, 2.0)
+            ... v = Vector3d(0.0, 1.0, 2.0)
             >>> v1 = v + 1
             >>> v1
-            Vector3D(0.0, 1.4472135955, 2.894427191)
+            Vector3d(0.0, 1.4472135955, 2.894427191)
             >>> v1.length - v.length
             0.99999999999999956
             >>> v1 + v
-            Vector3D(0.0, 2.4472135955, 4.894427191)
+            Vector3d(0.0, 2.4472135955, 4.894427191)
         """
         if isinstance(other, numbers.Number):
             # then add to the length of the vector
@@ -335,19 +251,19 @@ class Vector3D(object):
             # add the multiplied vector to self
             return self.normalized() * other + self
 
-        elif isinstance(other, Vector3D):
+        elif isinstance(other, Vector3d):
             # add all the coordinates together
             # there are probably more efficient ways to do this
-            return Vector3D(*(sum(p) for p in zip(self, other)))
+            return Vector3d(*(sum(p) for p in zip(self, other)))
         else:
             raise NotImplementedError
 
     def __sub__(self, other):
         """Subtract a vector or number
-            >>> v2 = Vector3D(-4.0, 1.2, 3.5)
-            >>> v1 = Vector3D(2.0, 1.1, 0.0)
+            >>> v2 = Vector3d(-4.0, 1.2, 3.5)
+            >>> v1 = Vector3d(2.0, 1.1, 0.0)
             >>> v2 - v1
-            Vector3D(-6.0, 0.1, 3.5)
+            Vector3d(-6.0, 0.1, 3.5)
         """
         return self.__add__(other * -1)
 
@@ -355,18 +271,18 @@ class Vector3D(object):
         """if with a number, then scalar multiplication of the vector,
             if with a Vector, then dot product, I guess for now, because
             the asterisk looks more like a dot than an X.
-            >>> v2 = Vector3D(-4.0, 1.2, 3.5)
-            >>> v1 = Vector3D(2.0, 1.1, 0.0)
+            >>> v2 = Vector3d(-4.0, 1.2, 3.5)
+            >>> v1 = Vector3d(2.0, 1.1, 0.0)
             >>> v2 * 1.25
-            Vector3D(-5.0, 1.5, 4.375)
+            Vector3d(-5.0, 1.5, 4.375)
             >>> v2 * v1 #dot product
             -6.6799999999999997
         """
         if isinstance(other, numbers.Number):
             # scalar multiplication for numbers
-            return Vector3D( *((n * other) for n in self))
+            return Vector3d( *((n * other) for n in self))
 
-        elif isinstance(other, Vector3D):
+        elif isinstance(other, Vector3d):
             # dot product for other vectors
             return self.dot(other)
 
@@ -389,22 +305,31 @@ class Vector3D(object):
         """
         return self.coords.__hash__()
 
-    def __repr__(self):
-        return 'Vector3D(%s, %s, %s)' % self.coords
+    def __eq__(self, other):
+        """I am allowing these to compared to tuples, and to say that yes, they
+        are equal. the idea here is that a Vector3d _is_ a tuple of floats, but
+        with some extra methods.
+        """
+        return self.coords.__eq__(other)
 
-class Point3D(Vector3D):
-    """Works like a Vector3D. I might add some point specific methods.
+    def __repr__(self):
+        return 'Vector3d(%s, %s, %s)' % self.coords
+
+
+
+class Point3d(Vector3d):
+    """Works like a Vector3d. I might add some point specific methods.
     """
     def __init__(self, *args, **kwargs):
-        super(Point3D, self).__init__(*args, **kwargs)
+        super(Point3d, self).__init__(*args, **kwargs)
 
     def __repr__(self):
-        return 'Point3D(%s, %s, %s)' % self.coords
+        return 'Point3d(%s, %s, %s)' % self.coords
 
     def distanceTo(self, other):
         """Find the distance between this point and another.
-            >>> p1 = Point3D(-2.2, -0.5, 0.0034)
-            >>> p2 = Point3D(3.45, 0.01, -2004.665)
+            >>> p1 = Point3d(-2.2, -0.5, 0.0034)
+            >>> p2 = Point3d(3.45, 0.01, -2004.665)
             >>> p1.distanceTo(p2)
             2004.676426897508
         """
@@ -412,16 +337,16 @@ class Point3D(Vector3D):
 
     def vectorTo(self, other):
         """Find the vector to another point.
-            >>> p1 = Point3D(-2.2, -0.5, 0.0034)
-            >>> p2 = Point3D(3.45, 0.01, -2004.665)
+            >>> p1 = Point3d(-2.2, -0.5, 0.0034)
+            >>> p2 = Point3d(3.45, 0.01, -2004.665)
             >>> p1.distanceTo(p2)
             2004.676426897508
             >>> p1.distanceTo(p2)
             2004.676426897508
             >>> p2.vectorTo(p1)
-            Vector3D(-5.65, -0.51, 2004.6684)
+            Vector3d(-5.65, -0.51, 2004.6684)
             >>> p1 - p2
-            Vector3D(-5.65, -0.51, 2004.6684)
+            Vector3d(-5.65, -0.51, 2004.6684)
         """
         return other - self
 
@@ -463,14 +388,14 @@ class PointSet(object):
         if points:
             # parse the points to create the pointList and pointDict
             # we want to be able to accept points as tuples, as lists, as
-            # Point3D objects, and as Vector3D objects. I guess if I add them
+            # Point3d objects, and as Vector3d objects. I guess if I add them
             # as iterables, that would be the simplest.
             self.points = points
 
     @property
     def points(self):
-        # go through the list and get each tuple as Point3D object
-        return [Point3D(*c) for c in self.pointList]
+        # go through the list and get each tuple as Point3d object
+        return [Point3d(*c) for c in self.pointList]
 
     @points.setter
     def points(self, values):
@@ -478,12 +403,12 @@ class PointSet(object):
         filters them if necessary.
         """
         for i, val in enumerate(values):
-            # Vector3Ds will need to be unwrapped
-            if isinstance(val, Vector3D):
-                point = Point3D(*val)
+            # Vector3ds will need to be unwrapped
+            if isinstance(val, Vector3d):
+                point = Point3d(*val)
             else:
                 # just assume it is some sort of iterable
-                point = Point3D(*(val[v] for v in range(3)))
+                point = Point3d(*(val[v] for v in range(3)))
             # here will build the dictionary, using indices as the only
             # value any given tuple refers to
             self.pointDict[point] = i
@@ -495,13 +420,13 @@ class PointSet(object):
         The `key` might be an integer or a coordinate tuple, or a point.
 
         There is a design question here: should it initialize the object as a
-        Point3D?
+        Point3d?
 
-        And if Point3Ds are already hashable, why am I using simple tuples when
-        I could use Point3Ds?
+        And if Point3ds are already hashable, why am I using simple tuples when
+        I could use Point3ds?
         """
-        # if it's a tuple or point3D and return the index
-        if isinstance(key, tuple) or isinstance(key, Vector3D):
+        # if it's a tuple or point3d and return the index
+        if isinstance(key, tuple) or isinstance(key, Vector3d):
             return self.pointDict[key]
         else:
             # assume it is an index or slice
@@ -510,7 +435,7 @@ class PointSet(object):
 
 
 
-WorldX = Vector3D(1.0, 0.0, 0.0)
-WorldY = Vector3D(0.0, 1.0, 0.0)
-WorldZ = Vector3D(0.0, 0.0, 1.0)
+WorldX = Vector3d(1.0, 0.0, 0.0)
+WorldY = Vector3d(0.0, 1.0, 0.0)
+WorldZ = Vector3d(0.0, 0.0, 1.0)
 

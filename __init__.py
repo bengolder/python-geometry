@@ -1,12 +1,12 @@
 from core import (
-        Vector3D,
-        Point3D,
+        Vector3d,
+        Point3d,
         PointSet,
 )
 
 __all__ = [
-        'Vector3D',
-        'Point3D',
+        'Vector3d',
+        'Point3d',
         'PointSet',
         ]
 

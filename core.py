@@ -122,7 +122,7 @@ class Vector3D(object):
     def __init__(self, x=0.0, y=0.0, z=0.0):
         for arg in (x, y, z):
             if not isinstance(arg, numbers.Number):
-                raise TypeError
+                raise TypeError, "Can't create use a %s to get coordinates" % type(arg)
         # coords is the essence of the data structure. It's immutable and
         # iterable, allowing us to iterate over the values as well as providing
         # a little bit of protection from accidentally changing the values see
@@ -390,7 +390,7 @@ class Vector3D(object):
         return self.coords.__hash__()
 
     def __repr__(self):
-        return 'Vector3D%s' % self.coords
+        return 'Vector3D(%s, %s, %s)' % self.coords
 
 class Point3D(Vector3D):
     """Works like a Vector3D. I might add some point specific methods.
@@ -399,7 +399,7 @@ class Point3D(Vector3D):
         super(Point3D, self).__init__(*args, **kwargs)
 
     def __repr__(self):
-        return 'Point3D%s' % self.coords
+        return 'Point3D(%s, %s, %s)' % self.coords
 
     def distanceTo(self, other):
         """Find the distance between this point and another.
@@ -456,35 +456,56 @@ class PointSet(object):
         # can be initialized with an empty set.
         # this set needs to contain tuples of point coords
         # and then extend and manage the use of that set
-        if not points:
-            self.coordList = []
-            self.coordDict = {}
-        else:
+        # intialize the dictionary and list first
+        # becasue any input points will be placed there to start
+        self.pointList = []
+        self.pointDict = {}
+        if points:
             # parse the points to create the pointList and pointDict
             # we want to be able to accept points as tuples, as lists, as
             # Point3D objects, and as Vector3D objects. I guess if I add them
             # as iterables, that would be the simplest.
-            raise NotImplementedError
+            self.points = points
 
     @property
     def points(self):
         # go through the list and get each tuple as Point3D object
-        return [Point3D(*c) for c in self.coordList]
+        return [Point3D(*c) for c in self.pointList]
 
     @points.setter
-    def points(self, value):
-        # reset the pointList and pointDict objects
-        raise NotImplementedError
+    def points(self, values):
+        """This method parses incoming values being used to define points and
+        filters them if necessary.
+        """
+        for i, val in enumerate(values):
+            # Vector3Ds will need to be unwrapped
+            if isinstance(val, Vector3D):
+                point = Point3D(*val)
+            else:
+                # just assume it is some sort of iterable
+                point = Point3D(*(val[v] for v in range(3)))
+            # here will build the dictionary, using indices as the only
+            # value any given tuple refers to
+            self.pointDict[point] = i
+            # and here we also build up a list, for lookups by index
+            self.pointList.append(point)
 
-    @property
-    def coords(self):
-        # go through the list and get each tuple as Point3D object
-        return self.coordList
+    def __getitem__(self, key):
+        """This builds a dictionary / list-like api on the PointSet.
+        The `key` might be an integer or a coordinate tuple, or a point.
 
-    @coords.setter
-    def coords(self, value):
-        # reset the coordList and pointDict objects
-        raise NotImplementedError
+        There is a design question here: should it initialize the object as a
+        Point3D?
+
+        And if Point3Ds are already hashable, why am I using simple tuples when
+        I could use Point3Ds?
+        """
+        # if it's a tuple or point3D and return the index
+        if isinstance(key, tuple) or isinstance(key, Vector3D):
+            return self.pointDict[key]
+        else:
+            # assume it is an index or slice
+            return self.pointList[key]
 
 
 

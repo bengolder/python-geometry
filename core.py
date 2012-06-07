@@ -401,6 +401,10 @@ class PointSet(object):
     def points(self, values):
         """This method parses incoming values being used to define points and
         filters them if necessary.
+
+        This creates an internal PointList and PointDict, which together mimick
+        the OrderedDict in Python 3.0. I'm combining these two pieces for backwards
+        compatibility.
         """
         for i, val in enumerate(values):
             # Vector3ds will need to be unwrapped
@@ -422,7 +426,7 @@ class PointSet(object):
         There is a design question here: should it initialize the object as a
         Point3d?
 
-        And if Point3ds are already hashable, why am I using simple tuples when
+        An if Point3ds are already hashable, why am I using simple tuples when
         I could use Point3ds?
         """
         # if it's a tuple or point3d and return the index
@@ -431,6 +435,10 @@ class PointSet(object):
         else:
             # assume it is an index or slice
             return self.pointList[key]
+
+    def __iter__(self):
+        """Uses the internal list of iteration"""
+        return self.pointList.__iter__()
 
 
 

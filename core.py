@@ -463,7 +463,7 @@ class PointSet(object):
                 return False
         return True
     def __le__(self, other):
-        pass
+        return self.issubset(other)
 
     def issuperset(self, other):
         """Used to see of all of the items in this object are contained in an
@@ -475,7 +475,7 @@ class PointSet(object):
                 return False
         return True
     def __ge__(self, other):
-        pass
+        return self.issuperset(other)
 
     def union(self, other):
         """returns a new PointSet with the points from self and the points from
@@ -489,31 +489,47 @@ class PointSet(object):
             newList.append(p)
         return PointSet(newList)
     def __or__(self, other):
-        pass
+        return self.union(other)
 
     def intersection(self, other):
         """returns the set intersection between self and other
             self & other
         """
-        pass
+        newList = []
+        for p in other:
+            if p in self:
+                newList.append(p)
+        return PointSet(newList)
     def __and__(self, other):
-        pass
+        return self.intersection(other)
 
     def difference(self, other):
         """
             self - other
         """
-        pass
+        newList = []
+        for p in self:
+            if p not in other:
+                newList.append(p)
+        return PointSet(newList)
     def __sub__(self, other):
-        pass
+        return self.difference(other)
 
     def symmetric_difference(self, other):
-        """
+        """ Returns all the points in self and other that are not in the
+            intersection of self and other.
             self ^ other
         """
-        pass
+        newList = []
+        for p in self:
+            if p not in other:
+                newList.append(p)
+        for p in other:
+            if p not in self:
+                newList.append(p)
+        return PointSet(newList)
     def __xor__(self, other):
-        pass
+        return self.symmetric_difference(other)
 
     def copy(self):
         """ returns a shallow copy of this pointset
@@ -523,37 +539,22 @@ class PointSet(object):
             newList.append(p)
         return PointSet(newList)
 
-    def update(self, other):
-        pass
+    def extend(self, other):
+        """Adds an iterable of new points to the set.
+        """
+        length = len(self)
+        for i, p in enumerate(other):
+            self.pointList.append(p)
+            self.pointDict[p] = i + length
     def __ior__(self, other):
-        pass
+        return self.extend(other)
 
-    def intersection_update(self, other):
-        pass
-    def __iand__(self, other):
-        pass
-
-    def symmetric_difference_update(self, other):
-        pass
-    def __ixor__(self, other):
-        pass
-
-    def add(self, other):
-        pass
-
-    def remove(self, other):
-        pass
-
-    def discard(self, other):
-        pass
-
-    def pop(self, other):
-        pass
-
-    def clear(self, other):
-        pass
-
-
+    def append(self, other):
+        """Adds a new point to the set.
+        """
+        length = len(self)
+        self.pointList.append(other)
+        self.pointDict[other] = length
 
 
 

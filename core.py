@@ -350,6 +350,9 @@ class Point3d(Vector3d):
         """
         return other - self
 
+
+
+
 class PointSet(object):
     """This class is meant to hold a set of *unique* points.
     It enforces this using python's built in `set` type. But points may still
@@ -437,8 +440,119 @@ class PointSet(object):
             return self.pointList[key]
 
     def __iter__(self):
-        """Uses the internal list of iteration"""
+        """Uses the internal list for iteration"""
         return self.pointList.__iter__()
+
+    def __len__(self):
+        """returns the number of Points it has."""
+        return self.pointList.__len__()
+
+    def __contains__(self, other):
+        """checks to see if this set has an item that matches other
+            other in self
+        """
+        return self.pointDict.__contains__(other)
+
+    def issubset(self, other):
+        """Used to see if all the items of an iterable are contained in this
+        pointSet.
+            self <= other
+        """
+        for n in other:
+            if n not in self:
+                return False
+        return True
+    def __le__(self, other):
+        pass
+
+    def issuperset(self, other):
+        """Used to see of all of the items in this object are contained in an
+        other object.
+            self >= other
+        """
+        for n in self:
+            if n not in other:
+                return False
+        return True
+    def __ge__(self, other):
+        pass
+
+    def union(self, other):
+        """returns a new PointSet with the points from self and the points from
+        other.
+        self | other
+        """
+        newList = []
+        for p in self:
+            newList.append(p)
+        for p in other:
+            newList.append(p)
+        return PointSet(newList)
+    def __or__(self, other):
+        pass
+
+    def intersection(self, other):
+        """returns the set intersection between self and other
+            self & other
+        """
+        pass
+    def __and__(self, other):
+        pass
+
+    def difference(self, other):
+        """
+            self - other
+        """
+        pass
+    def __sub__(self, other):
+        pass
+
+    def symmetric_difference(self, other):
+        """
+            self ^ other
+        """
+        pass
+    def __xor__(self, other):
+        pass
+
+    def copy(self):
+        """ returns a shallow copy of this pointset
+        """
+        newList = []
+        for p in self:
+            newList.append(p)
+        return PointSet(newList)
+
+    def update(self, other):
+        pass
+    def __ior__(self, other):
+        pass
+
+    def intersection_update(self, other):
+        pass
+    def __iand__(self, other):
+        pass
+
+    def symmetric_difference_update(self, other):
+        pass
+    def __ixor__(self, other):
+        pass
+
+    def add(self, other):
+        pass
+
+    def remove(self, other):
+        pass
+
+    def discard(self, other):
+        pass
+
+    def pop(self, other):
+        pass
+
+    def clear(self, other):
+        pass
+
 
 
 

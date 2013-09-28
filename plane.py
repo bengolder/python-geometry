@@ -31,10 +31,15 @@ class Plane3d(object):
 
 
     def angleTo(self, other):
-        """measures the angle between this plane and another plane. Units
-        expressed in radians.
+        """measures the angle between this plane and another plane. This uses
+        that angle between two normal vectors.
+        Units expressed in radians.
         """
-        pass
+        if isinstance(other, Plane3d):
+            otherVect = other.normal
+        elif isinstance(other, Vector3d):
+            otherVect = other
+        return self.normal.angleTo(otherVect)
 
 
     def intersect(self, other):
@@ -42,7 +47,9 @@ class Plane3d(object):
         """
         if isinstance(other, Plane3d):
             # return the line intersection of two planes
-            pass
+            # first, get the cross product of the two plane normals
+            # which is a vector parallel to L
+            vector = self.normal.cross(other.normal)
         elif isinstance(other, Line3d):
             # return the point intersection of a line and a plane
             pass

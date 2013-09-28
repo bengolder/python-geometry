@@ -3,6 +3,7 @@
 import math
 import numbers
 
+
 from core import isRoughlyZero
 
 
@@ -224,6 +225,16 @@ class Vector3d(object):
 
     def __repr__(self):
         return 'Vector3d(%s, %s, %s)' % self.coords
+
+    def angleTo(self, other):
+        """computes the angle between two vectors
+            cos theta = (n * m) / (n.length * m.length)
+        """
+        cosTheta = (self * other) / (self.length * other.length)
+        return math.acos(cosTheta)
+
+
+
 
 
 

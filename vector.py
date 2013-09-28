@@ -9,11 +9,6 @@ from core import isRoughlyZero
 class Vector3d(object):
     """A 3d vector object
 
-    Perhaps these can be hashable if calling __hash__ returns a hash of a tuple
-    of a vector's coordinates. That would be close to what I'm looking for:
-    basically an object that for all intents and purposes can be treated like a
-    tuple of floats, but which has many additional methods and hooks for
-    functionality.
     """
     def __init__(self, x=0.0, y=0.0, z=0.0):
         # coords is the essence of the data structure. It's immutable and

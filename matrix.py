@@ -26,7 +26,7 @@ class Matrix(object):
     """
     def __init__(self, table=None, rows=3, columns=3):
         """Nested iterables of values can be passed, or you can designate a size
-        of the matrix. The default is an identity matrix."""
+        of the matrix. The default is 3x3 identity matrix."""
         if table:
             # just use the given table, iterate through it and convert it to
             # tuples

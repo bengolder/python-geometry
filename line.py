@@ -13,9 +13,15 @@ class Line3d(object):
     (0,0,0) and will be parallel with the given vector.
 
     """
-    def __init__(self, vector, point):
-        self.vector = vector
-        self.point = point
+    def __init__(self, *args):
+        if isinstance(args[0], Vector3d):
+            # assume we have a parallel vector then a point
+            self.vector = args[0]
+            self.point = args[1]
+        else:
+            # assume we have two points
+            self.vector = args[1] - args[0]
+            self.point = args[0]
 
     def __repr__(self):
         return 'Line3d( %s, %s )' % (self.vector, self.point)

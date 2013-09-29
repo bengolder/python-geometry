@@ -254,7 +254,14 @@ class Point3d(Vector3d):
             >>> p1.distanceTo(p2)
             2004.676426897508
         """
-        return (other - self).length
+        if isinstance(other, Plane3d):
+            # get distance between point and plane
+            pass
+        elif isinstance(other, Line3d):
+            # get distance between point and line
+            pass
+        else:
+            return (other - self).length
 
     def vectorTo(self, other):
         """Find the vector to another point.

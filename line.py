@@ -13,8 +13,7 @@ class Line3d(object):
     (0,0,0) and will be parallel with the given vector.
 
     """
-    def __init__(self, vector=(1,0,0), point=(0,0,0)):
-        pass
+    def __init__(self, vector, point):
         self.vector = vector
         self.point = point
 

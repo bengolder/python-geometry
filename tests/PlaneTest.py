@@ -21,6 +21,8 @@ def testPlane():
 
     print planeB.angleTo(planeA)
 
+    print planeB.intersect(planeA)
+
 
 if __name__=="__main__":
     testPlane()

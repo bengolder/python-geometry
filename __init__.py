@@ -14,6 +14,8 @@ from line import (
         Line3d,
         )
 
+import rhino
+
 __all__ = [
         'Vector3d',
         'Point3d',
@@ -21,6 +23,7 @@ __all__ = [
         'Matrix',
         'Line3d',
         'Plane3d',
+        'rhino',
         ]
 
 

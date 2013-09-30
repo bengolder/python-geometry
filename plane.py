@@ -61,10 +61,10 @@ class Plane3d(object):
                 # the planes intersect in a line
                 # first find the largest coordinate in the vector
                 cNum = None
-                max = 0
+                cMax = 0
                 for i, c in enumerate(absCoords):
-                    if c > max:
-                        max = c
+                    if c > cMax:
+                        cMax = c
                         cNum = i
                 dims = ["x","y","z"]
                 biggestDim = dims.pop(cNum)

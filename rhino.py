@@ -14,10 +14,9 @@ def importFromRhino(objs):
     list or tuple of objects
     """
     if type(objs) in (list, tuple):
-        for obj in objs:
-            yield convertFromRhino(obj)
+        return [convertFromRhino(obj) for obj in objs]
     else:
-        return convertFromRhino(obj)
+        return convertFromRhino(objs)
 
 def convertFromRhino(obj):
     return importAndConvert[type(obj)](obj)
@@ -27,12 +26,11 @@ def exportToRhino(objs):
     converts them to the appropriate type of Rhinoo object
     """
     if type(objs) in (list, tuple):
-        for obj in objs:
-            yield exportToRhino(obj)
+        return [convertToRhino(obj) for obj in objs]
     else:
-        return exportToRhino(obj)
+        return convertToRhino(objs)
 
-def exportToRhino(obj):
+def convertToRhino(obj):
     return convertAndExport[type(obj)](obj)
 
 
@@ -49,13 +47,13 @@ importAndConvert = {
         }
 
 convertAndExport = {
-        Vector3d: lambda g: rg.Vector3d(*g),
-        Point3d: lambda g: rg.Point3d(*g),
+        Vector3d: lambda g: rg.Vector3d(*g.asList()),
+        Point3d: lambda g: rg.Point3d(*g.asList()),
         Plane3d: lambda g: rg.Plane(
-            exportToRhino(g.point),
-            exportToRhino(g.normal)),
+            convertToRhino(g.point),
+            convertToRhino(g.normal)),
         Line3d: lambda g: rg.Line(
-            exportToRhino(g.point),
-            exportToRhino(g.vector)),
+            convertToRhino(g.point),
+            convertToRhino(g.vector)),
         }
 

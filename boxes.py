@@ -12,7 +12,7 @@ class Box2D(object):
 
     def center(self):
         """Get or set the center of the box"""
-        return (
+        return Point(
                 self.x(0.5),
                 self.y(0.5),
                 )

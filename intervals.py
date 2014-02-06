@@ -11,11 +11,12 @@ class Interval(object):
         return ( value - self.start ) / self.length
 
     def contains( self, value):
+        """tests if a value falls within the interval's bounds"""
         return self.start < value < self.end
 
     def __call__( self, value):
-        """given a percentage value along the interval, this
-        returns the actual value"""
+        """given a fractional value along the interval (between
+        0.0 and 1.0), this returns the actual value"""
         return (self.length * value) + self.start
 
 

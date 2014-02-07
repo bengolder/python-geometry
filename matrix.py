@@ -12,7 +12,6 @@ import numbers
 import itertools
 
 from core import isRoughlyZero
-from vector import Vector3d, Point3d, PointSet
 
 class MatrixError(Exception):
     def __init__(self, msg):
@@ -188,7 +187,5 @@ class Matrix(object):
         return '<Matrix([\n%s\n])>' % '\n'.join(
             ['(%s)' % row_repr(r) for r in self]
             )
-
-
 
 

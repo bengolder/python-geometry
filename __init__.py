@@ -1,3 +1,11 @@
+from intervals import (
+        Interval,
+        Scale,
+)
+from boxes import (
+        Box2d,
+        Box3d,
+)
 from vector2d import (
         Vector2d,
         PageX,
@@ -30,6 +38,10 @@ from line import (
         )
 
 __all__ = [
+        'Interval',
+        'Scale',
+        'Box2d',
+        'Box3d',
         'Vector2d',
         'Vector3d',
         'Point2d',

@@ -25,16 +25,6 @@ class Vector2d(VectorBase):
 
     def __getitem__(self, key):
         """Treats the vector as a tuple or dict for indexes and slicing.
-            >>> v
-            Vector3d(2.0, 1.0, 2.2)
-            >>> v[0]
-            2.0
-            >>> v[-1]
-            2.2000000000000002
-            >>> v[:2]
-            (2.0, 1.0)
-            >>> v['y']
-            1.0
         """
         # dictionary
         if key in ('x','y'):

@@ -1,15 +1,6 @@
 import numbers
 import math
 
-"""
-    should be able to:
-        divide using an integer (into equal pieces)
-        divide using a float (into pieces with a remainder)
-        convert a set of numbers, instead of just one
-    Should I create an interpolator class, as d3 uses?
-
-"""
-
 class Interval(object):
     """
         Intervals are one-dimensional spaces on a number line
@@ -23,6 +14,9 @@ class Interval(object):
             two arguments, which become the start and end of the interval
             more arguments - this derives the max and min of all the
                 arguments.
+        divide using an integer (into equal pieces)
+        divide using a float (into pieces with a remainder)
+        convert a set of numbers, instead of just one
 
        The interval is half-open by default. In other words, the start value is
        included in the interval, but the end value is not . [start, end)

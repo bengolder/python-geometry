@@ -35,12 +35,13 @@ class Interval(object):
             if hasattr(args[0], '__iter__'):
                 start = min(args[0])
                 end = max(args[0])
-            if isinstance( args[0], numbers.Number ):
+            elif isinstance( args[0], numbers.Number ):
                 # assume we have a width
                 start = 0.0
                 end = start + args[0]
             else:
-                start =
+                start = 0.0
+                end = 1.0
 
         elif len(args) == 2:
             # assume we have a start and end
@@ -61,8 +62,7 @@ class Interval(object):
         this returns a fraction between 0 and 1of the distance along the interval,
         """
         if len( args ) > 1:
-            for arg in args:
-                yield (arg - self.start) / self.length
+            return [(arg - self.start) / self.length for arg in args]
         else:
             return (self.length * args[0]) + self.start
         return ( value - self.start ) / self.length
@@ -75,8 +75,7 @@ class Interval(object):
         """given a fractional value along the interval (between
         0.0 and 1.0), this returns the actual value"""
         if len( args ) > 1:
-            for arg in args:
-                yield (self.length * arg) + self.start
+            return [((self.length * arg) + self.start) for arg in args]
         else:
             return (self.length * args[0]) + self.start
 

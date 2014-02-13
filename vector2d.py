@@ -2,7 +2,7 @@ from vector import VectorBase
 
 class Vector2d(VectorBase):
     def __init__(self, x=0.0, y=0.0):
-        super(self.__class__, self).__init__()
+        VectorBase.__init__(self)
         self.coords = (x, y)
 
     @property
@@ -65,11 +65,7 @@ class Point2d(Vector2d):
             >>> p1.distanceTo(p2)
             2004.676426897508
         """
-        elif isinstance(other, Line2d):
-            # get distance between point and line
-            raise NotImplementedError
-        else:
-            return (other - self).length
+        return (other - self).length
 
 PageX = Vector2d(1.0, 0.0)
 PageY = Vector2d(0.0, 1.0)

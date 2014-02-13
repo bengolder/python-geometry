@@ -2,7 +2,7 @@
 from vector import VectorBase
 from vector2d import Vector2d
 
-class Vector3d(VectorBase, Vector2d):
+class Vector3d(Vector2d):
     """A 3d vector object
     """
     def __init__(self, x=0.0, y=0.0, z=0.0):
@@ -10,8 +10,7 @@ class Vector3d(VectorBase, Vector2d):
         # iterable, allowing us to iterate over the values as well as providing
         # a little bit of protection from accidentally changing the values see
         # `classTest` in tests to understand more of the reasoning here.
-        VectorBase.__init__()
-        Vector2d.__init__()
+        Vector2d.__init__(self)
         self.coords = (x, y, z)
 
     @property
@@ -70,13 +69,6 @@ class Vector3d(VectorBase, Vector2d):
         y = (self[2] * other[0]) - (self[0] * other[2])
         z = (self[0] * other[1]) - (self[1] * other[0])
         return self.__class__(x, y, z)
-
-        elif isinstance(other, self.__class__):
-            # add all the coordinates together
-            # there are probably more efficient ways to do this
-            return self.__class__(*(sum(p) for p in zip(self, other)))
-        else:
-            raise NotImplementedError
 
     def __repr__(self):
         return 'Vector3d(%s, %s, %s)' % self.coords

@@ -11,7 +11,7 @@ from vector2d import (
         PageX,
         PageY,
 )
-from vector import (
+from vector3d import (
         Vector3d,
         WorldX,
         WorldY,
@@ -35,6 +35,7 @@ from plane import (
         )
 from line import (
         Line3d,
+        LineSegment2d,
         )
 
 __all__ = [
@@ -54,6 +55,7 @@ __all__ = [
         'WorldZ'
         'Matrix',
         'Line3d',
+        'LineSegment2d',
         'Plane3d',
         ]
 

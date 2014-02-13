@@ -1,6 +1,6 @@
 
 class PointBase(object):
-    """Should not be instantiated ditectly.
+    """Should not be instantiated directly.
     """
     def vectorTo(self, other):
         """Find the vector to another point.

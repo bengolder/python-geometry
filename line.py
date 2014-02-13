@@ -30,4 +30,9 @@ class Line3d(object):
 
 
 
+class LineSegment2d(object):
+    def __init__(self, start_point, end_point):
+        self.coords = (start_point, end_point)
+    def __repr__(self):
+        return 'LineSegment2d( %s, %s )' % self.coords
 

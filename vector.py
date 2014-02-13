@@ -75,6 +75,12 @@ class VectorBase(object):
             # multiply the number by the normalized self, and then
             # add the multiplied vector to self
             return self.normalized() * other + self
+        elif isinstance(other, self.__class__):
+            # add all the coordinates together
+            # there are probably more efficient ways to do this
+            return self.__class__(*(sum(p) for p in zip(self, other)))
+        else:
+            raise NotImplementedError
 
     def __sub__(self, other):
         """Subtract a vector or number

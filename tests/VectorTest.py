@@ -3,7 +3,7 @@
 import sys
 sys.path.append("./../..")
 
-from pygeom import Vector3d, Point3d
+from geometry import Vector3d, Point3d
 
 
 def testVector():

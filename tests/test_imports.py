@@ -5,8 +5,6 @@ class TestImport(unittest.TestCase):
         pass
 
     def test_imports(self):
-        import sys
-        sys.path.append("./..")
         from geometry import (
                 Interval,
                 Scale,

@@ -1,5 +1,5 @@
-from vector3d import Vector3d
-from point import PointBase
+from .vector3d import Vector3d
+from .point import PointBase
 
 class Point3d(Vector3d, PointBase):
     """Functionally similar to a Vector3d, but concpetually distinct, and

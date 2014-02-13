@@ -11,7 +11,7 @@ import math
 import numbers
 import itertools
 
-from core import isRoughlyZero
+from .core import isRoughlyZero
 
 class MatrixError(Exception):
     def __init__(self, msg):

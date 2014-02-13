@@ -1,6 +1,7 @@
 import math
 import numbers
-from core import isRoughlyZero
+
+from .core import isRoughlyZero
 
 class VectorBase(object):
     """Should not be instantiated directly

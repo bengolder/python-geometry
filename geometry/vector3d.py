@@ -1,6 +1,5 @@
 """This module is for the Vector class"""
-from vector import VectorBase
-from vector2d import Vector2d
+from .vector2d import Vector2d
 
 class Vector3d(Vector2d):
     """A 3d vector object

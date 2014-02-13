@@ -1,5 +1,5 @@
-from vector2d import Vector2d
-from point import PointBase
+from .vector2d import Vector2d
+from .point import PointBase
 
 class Point2d(Vector2d, PointBase):
     def __init__(self, *args, **kwargs):

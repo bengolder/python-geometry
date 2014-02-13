@@ -1,4 +1,4 @@
-from point3d import Point3d
+from .point3d import Point3d
 
 class PointSet(object):
     """This class is meant to hold a set of *unique* points.

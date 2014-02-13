@@ -1,4 +1,4 @@
-from vector import VectorBase
+from .vector import VectorBase
 
 class Vector2d(VectorBase):
     def __init__(self, x=0.0, y=0.0):

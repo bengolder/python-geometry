@@ -1,6 +1,6 @@
-from point2d import Point2d
-from point3d import Point3d
-from intervals import Interval, Scale
+from .point2d import Point2d
+from .point3d import Point3d
+from .intervals import Interval, Scale
 
 """
 increase to encompass a point

@@ -10,5 +10,12 @@ python:
 
 install:
   - "pip install ."
+  - "pip install -r requirements-test.txt"
 
-script: make test
+script: 
+  run_tests
+
+after_success:
+  coveralls
+
+

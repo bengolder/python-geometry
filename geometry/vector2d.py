@@ -41,12 +41,15 @@ class Vector2d(VectorBase):
         """For getting a copy of the same vector but with a new y value"""
         return self.__class__(self[0], number)
 
+    def __repr__(self):
+        return 'Vector2d(%s, %s)' % self.coords
+
 class Point2d(Vector2d):
     def __init__(self, *args, **kwargs):
         super(self.__class__, self).__init__(*args, **kwargs)
 
     def __repr__(self):
-        return 'Point2d(%s, %s, %s)' % self.coords
+        return 'Point2d(%s, %s)' % self.coords
 
     def distanceTo(self, other):
         """Find the distance between this point and another.

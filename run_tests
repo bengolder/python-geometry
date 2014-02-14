@@ -1,5 +1,0 @@
-#!/bin/bash
-nosetests \
-    --nocapture \
-    --with-coverage \
-    --cover-package=geometry

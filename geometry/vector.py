@@ -12,21 +12,12 @@ class VectorBase(object):
         """
         # only calculate the length if asked to.
         return math.sqrt(sum(n**2 for n in self))
-    @length.setter
-    def length(self, number):
-        """Set the vector length
-        """
-        return self.toLength( number )
 
     def normalized(self):
         """just returns the normalized version of self without editing self in
         place.
         """
-        # think how important float accuracy is here!
-        if isRoughlyZero(sum(n**2 for n in self)):
-            raise ZeroDivisionError
-        else:
-            return self * (1 / self.length)
+        return self * (1 / self.length)
 
     def toLength(self, number):
         """Get a parallel vector with the input amplitude."""
@@ -40,12 +31,6 @@ class VectorBase(object):
 
     def dot(self, other):
         """Gets the dot product of this vector and another.
-            >>> v
-            Vector3d(5, 1.20747670785, 60.0)
-            >>> v1
-            Vector3d(0.0, 2.0, 1.0)
-            >>> v1.dot(v)
-            62.41495341569977
         """
         return sum((p[0] * p[1]) for p in zip(self, other))
 

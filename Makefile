@@ -1,4 +1,4 @@
-.PHONY: test_local test_travis
+.PHONY: test test_travis
 
 test_travis:
 	nosetests \
@@ -6,7 +6,7 @@ test_travis:
 		--with-coverage \
 		--cover-package=geometry
 
-test_local:
+test:
 	make test_travis
 	rm .coverage
 

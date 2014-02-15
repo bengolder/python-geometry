@@ -4,19 +4,26 @@ import random
 from geometry import Vector2d, Vector3d, Point2d, Point3d
 
 class CoordGenerator:
-    def __init__(self, scale=100, dim=3):
+    def __init__(self, scale=100, dim=3, number_type=float):
         self.bounds = (
                 scale / -2,
                 scale / 2
                 )
         self.dim = dim
+        self.number_type = number_type
 
-    def __call__(self, number_type=float):
-        if number_type == float:
-            coords = [random.uniform(*self.bounds) for i in range(self.dim)]
-        elif number_type == int:
+    def __call__(self):
+        if self.number_type == int:
             coords = [random.randint(*self.bounds) for i in range(self.dim)]
+        else:
+            coords = [random.uniform(*self.bounds) for i in range(self.dim)]
         return coords
+
+    def point(self):
+        if self.dim == 3:
+            return Point3d(*self())
+        else:
+            return Point2d(*self())
 
 
 class TestVectors(unittest.TestCase):
@@ -36,6 +43,17 @@ class TestVectors(unittest.TestCase):
         self.assertEqual( self.v2[0], 45 )
         # should not have been converted to a float
         self.assertNotEqual( type(self.v3['x']), type(543.0) )
+        v = Vector2d( 3, 4 )
+        self.assertEqual( v.length, 5 )
+        w = v.toLength( 10 )
+        self.assertAlmostEqual( w.x, 6 )
+        coords = (6, 8, 10)
+        for i, c in enumerate(w):
+            self.assertAlmostEqual(c, coords[i])
+        m = v.toLength(0.0)
+        with self.assertRaises(ZeroDivisionError):
+            m.normalized()
+
 
     def test_vector_operators(self):
         pass

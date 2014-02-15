@@ -4,19 +4,26 @@ import random
 from geometry import Vector2d, Vector3d, Point2d, Point3d
 
 class CoordGenerator:
-    def __init__(self, scale=100, dim=3):
+    def __init__(self, scale=100, dim=3, number_type=float):
         self.bounds = (
                 scale / -2,
                 scale / 2
                 )
         self.dim = dim
+        self.number_type = number_type
 
-    def __call__(self, number_type=float):
-        if number_type == float:
-            coords = [random.uniform(*self.bounds) for i in range(self.dim)]
-        elif number_type == int:
+    def __call__(self):
+        if self.number_type == int:
             coords = [random.randint(*self.bounds) for i in range(self.dim)]
+        else:
+            coords = [random.uniform(*self.bounds) for i in range(self.dim)]
         return coords
+
+    def point(self):
+        if self.dim == 3:
+            return Point3d(*self())
+        else:
+            return Point2d(*self())
 
 
 class TestVectors(unittest.TestCase):

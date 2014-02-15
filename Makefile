@@ -1,4 +1,4 @@
-.PHONY: test_local test_travis
+.PHONY: test_local test_travis test_btree
 
 test_travis:
 	nosetests \
@@ -9,4 +9,8 @@ test_travis:
 test_local:
 	make test_travis
 	rm .coverage
+
+test_btree:
+	nosetests --nocapture tests/test_btree.py:TestBTreeNode.test_constructor
+
 

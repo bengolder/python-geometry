@@ -1,3 +1,4 @@
+from .core import string_type
 
 class BTreeNode(object):
     def __init__(self, key, data=None, parent=None, left=None,
@@ -20,7 +21,7 @@ class BTreeNode(object):
     def key(self, value):
         if hasattr(value, '__call__'):
             self._key = value
-        elif isinstance(value, basestring):
+        elif isinstance(value, string_type):
             self._key = lambda d: d[value]
         else:
             self._key = lambda d: value

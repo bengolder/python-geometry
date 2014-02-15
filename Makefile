@@ -1,4 +1,4 @@
-.PHONY: test test_travis
+.PHONY: test test_travis clean
 
 test_travis:
 	nosetests \
@@ -6,7 +6,13 @@ test_travis:
 		--with-coverage \
 		--cover-package=geometry
 
+clean:
+	rm .coverage
+	rm geometry/*.pyc
+	rm tests/*.pyc
+
 test:
 	make test_travis
-	rm .coverage
+	make clean
+
 

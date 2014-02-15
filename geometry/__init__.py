@@ -37,6 +37,11 @@ from .line import (
         Line3d,
         LineSegment2d,
         )
+from .btree import (
+        BTreeNode,
+        BinarySearchTree,
+        BalancedBinarySearchTree,
+)
 
 __all__ = [
         'Interval',
@@ -57,6 +62,9 @@ __all__ = [
         'Line3d',
         'LineSegment2d',
         'Plane3d',
+        'BTreeNode',
+        'BinarySearchTree',
+        'BalancedBinarySearchTree',
         ]
 
 

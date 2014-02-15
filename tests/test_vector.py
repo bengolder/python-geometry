@@ -43,6 +43,17 @@ class TestVectors(unittest.TestCase):
         self.assertEqual( self.v2[0], 45 )
         # should not have been converted to a float
         self.assertNotEqual( type(self.v3['x']), type(543.0) )
+        v = Vector2d( 3, 4 )
+        self.assertEqual( v.length, 5 )
+        w = v.toLength( 10 )
+        self.assertAlmostEqual( w.x, 6 )
+        coords = (6, 8, 10)
+        for i, c in enumerate(w):
+            self.assertAlmostEqual(c, coords[i])
+        m = v.toLength(0.0)
+        with self.assertRaises(ZeroDivisionError):
+            m.normalized()
+
 
     def test_vector_operators(self):
         pass

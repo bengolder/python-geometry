@@ -1,4 +1,4 @@
-.PHONY: test_local test_travis test_btree
+.PHONY: test test_travis clean
 
 test_travis:
 	nosetests \
@@ -6,11 +6,12 @@ test_travis:
 		--with-coverage \
 		--cover-package=geometry
 
-test_local:
-	make test_travis
+clean:
 	rm .coverage
+	rm geometry/*.pyc
+	rm tests/*.pyc
 
-test_btree:
-	nosetests --nocapture tests/test_btree.py:TestBTreeNode.test_constructor
-
+test:
+	make test_travis
+	make clean
 

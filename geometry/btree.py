@@ -33,7 +33,7 @@ class BinarySearchTree(object):
     def walk(self, node):
         if node != None:
             self.walk(node.left)
-            print node.key
+            print( node.key )
             self.walk(node.right)
 
     def insert(self, key, data=None):

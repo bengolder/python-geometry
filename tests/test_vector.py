@@ -51,8 +51,8 @@ class TestVectors(unittest.TestCase):
         for i, c in enumerate(w):
             self.assertAlmostEqual(c, coords[i])
         m = v.toLength(0.0)
-        with self.assertRaises(ZeroDivisionError):
-            m.normalized()
+        call_normal = lambda x: x.normalized()
+        self.assertRaises(ZeroDivisionError, call_normal, m)
 
 
     def test_vector_operators(self):

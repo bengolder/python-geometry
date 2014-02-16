@@ -14,4 +14,4 @@ class Point2d(Vector2d, PointBase):
         """
         return (other - self).length
 
-PageOrigin = Point2d(0.0,0.0,0.0)
+PageOrigin = Point2d(0.0,0.0)

@@ -17,7 +17,7 @@ class Vector2d(VectorBase):
         return self[1]
     @y.setter
     def y(self, value):
-        self.coords = self.coords[:1] + value + self.coords[2:]
+        self.coords = self.coords[:1] + (value,) + self.coords[2:]
 
     def asDict(self):
         """return dictionary representation of the vector"""

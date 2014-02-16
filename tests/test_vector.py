@@ -39,6 +39,14 @@ class TestVectors(unittest.TestCase):
         self.v2 = Vector2d(**self.d2)
         self.v3 = Vector3d(**self.d3)
 
+    def assertEqualDicts(self, a, b):
+        for ka in a:
+            self.assertTrue( ka in b)
+            self.assertEqual( a[ka], b[ka] )
+        for kb in b:
+            self.assertTrue( kb in a)
+            self.assertEqual( a[kb], b[kb] )
+
     def test_vector_members(self):
         self.assertEqual( self.v2.y, -453 )
         self.assertEqual( self.v2[0], 45 )
@@ -83,6 +91,22 @@ class TestVectors(unittest.TestCase):
         d = {w:10}
         self.assertEqual(d[u], 10)
 
+    def test_vector2d_items(self):
+        v = Vector2d(3, 6)
+        d = {'x':3, 'y':6}
+        self.assertEqual( v.x, 3)
+        self.assertEqual( v.y, 6)
+        self.assertEqual( v['x'], 3)
+        self.assertEqualDicts( v.asDict(), d )
+        self.assertEqual( v.toX(-20.5).x, -20.5 )
+        self.assertEqual( v.toY(-20.5).y, -20.5 )
+        v.x = 9
+        v.y = -12
+        self.assertEqual( str(v), 'Vector2d(9, -12)')
+
+
+    def test_vector2d_operators(self):
+        pass
 
 class TestPoints(TestVectors):
 

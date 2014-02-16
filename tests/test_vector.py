@@ -19,12 +19,6 @@ class CoordGenerator:
             coords = [random.uniform(*self.bounds) for i in range(self.dim)]
         return coords
 
-    def point(self):
-        if self.dim == 3:
-            return Point3d(*self())
-        else:
-            return Point2d(*self())
-
 
 class TestVectors(unittest.TestCase):
 
@@ -33,8 +27,8 @@ class TestVectors(unittest.TestCase):
         self.coords = [self.gen() for i in range(10)]
         self.d2 = {'x':45, 'y':-453}
         self.d3 = {'x':543, 'y':-9872183, 'z':-32.543}
-        self.vectors2d = [Vector2d(c[:2]) for c in self.coords]
-        self.vectors3d = [Vector3d(c) for c in self.coords]
+        self.vectors2d = [Vector2d(*c[:2]) for c in self.coords]
+        self.vectors3d = [Vector3d(*c) for c in self.coords]
         self.v2 = Vector2d(**self.d2)
         self.v3 = Vector3d(**self.d3)
 

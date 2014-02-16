@@ -6,8 +6,8 @@ class Point3d(Vector3d, PointBase):
     includes several additional methods.
     """
     def __init__(self, *args, **kwargs):
-        Vector3d.__init__()
-        PointBase.__init__()
+        Vector3d.__init__(self)
+        PointBase.__init__(self)
 
     def __repr__(self):
         return 'Point3d(%s, %s, %s)' % self.coords

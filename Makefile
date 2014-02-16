@@ -15,5 +15,3 @@ test:
 	make test_travis
 	make clean
 
-
-

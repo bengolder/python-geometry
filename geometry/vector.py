@@ -38,16 +38,6 @@ class VectorBase(object):
         """we want to add single numbers as a way of changing the length of the
         vector, while it would be nice to be able to do vector addition with
         other vectors.
-            >>> from core import Vector3d
-            >>> # test add
-            ... v = Vector3d(0.0, 1.0, 2.0)
-            >>> v1 = v + 1
-            >>> v1
-            Vector3d(0.0, 1.4472135955, 2.894427191)
-            >>> v1.length - v.length
-            0.99999999999999956
-            >>> v1 + v
-            Vector3d(0.0, 2.4472135955, 4.894427191)
         """
         if isinstance(other, numbers.Number):
             # then add to the length of the vector
@@ -59,7 +49,9 @@ class VectorBase(object):
             # there are probably more efficient ways to do this
             return self.__class__(*(sum(p) for p in zip(self, other)))
         else:
-            raise NotImplementedError
+            raise TypeError(
+                    "unsupported operand (+/-) for types %s and %s" % (
+                        self.__class__, type(other)))
 
     def __sub__(self, other):
         """Subtract a vector or number
@@ -83,25 +75,13 @@ class VectorBase(object):
 
         elif isinstance(other, self.__class__):
             # dot product for other vectors
-            return self.__class__(other)
+            return self.dot(other)
+        else:
+            raise TypeError(
+                    "unsupported operand (multiply/divide) for types %s and %s" % (
+                        self.__class__, type(other)))
 
     def __hash__(self):
-        """This method provides a hashing value that is the same hashing value
-        returned by the vector's coordinate tuple. This allows for testing for
-        equality between vectors and tuples, as well as between vectors.
-
-        Two vector instances (a and b) with the same coordinates would return True
-        when compared for equality: a == b, a behavior that I would love to
-        have, and which would seem very intuitive.
-
-        They would also return true when compared for equality with a tuple
-        equivalent to their coordinates. My hope is that this will greatly aid
-        in filtering duplicate points where necessary - something I presume
-        many geometry algorithms will need to look out for.
-
-        I'm not sure it is a bad idea, but I intend this class to basically be a
-        tuple of floats wrapped with additional functionality.
-        """
         return self.coords.__hash__()
 
     def __eq__(self, other):
@@ -109,7 +89,7 @@ class VectorBase(object):
         are equal. the idea here is that a Vector3d _is_ a tuple of floats, but
         with some extra methods.
         """
-        return self.coords.__eq__(other)
+        return self.coords == other.coords
 
     def angleTo(self, other):
         """computes the angle between two vectors

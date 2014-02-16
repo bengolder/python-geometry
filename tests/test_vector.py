@@ -1,5 +1,6 @@
 import unittest
 import random
+import math
 
 from geometry import Vector2d, Vector3d, Point2d, Point3d
 
@@ -56,7 +57,31 @@ class TestVectors(unittest.TestCase):
 
 
     def test_vector_operators(self):
-        pass
+        # test +, *, -
+        v = Vector2d( -6, -8)
+        u = Vector2d( 3, 4)
+        w = v + u
+        self.assertAlmostEqual(w.length, 5)
+        w = v - u
+        self.assertAlmostEqual(w.length, 15)
+        w = v + 10
+        self.assertAlmostEqual(w.length, 20)
+        self.assertAlmostEqual(v * u, -50)
+        self.assertEqual(v * u, u * v)
+        w = u * 2
+        self.assertAlmostEqual(w.length, 10)
+        coords = [c for c in u]
+        w = Vector2d( *coords )
+        self.assertTrue( w.coords == u.coords )
+        self.assertTrue( w == u )
+        self.assertFalse( w is u )
+        self.assertAlmostEqual(v.angleTo(u), math.pi)
+        add = lambda n: w + n
+        mul = lambda n: w * n
+        self.assertRaises(TypeError, add, 'string')
+        self.assertRaises(TypeError, mul, 'string')
+        d = {w:10}
+        self.assertEqual(d[u], 10)
 
 
 class TestPoints(TestVectors):

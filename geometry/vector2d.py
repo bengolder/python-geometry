@@ -21,7 +21,7 @@ class Vector2d(VectorBase):
 
     def asDict(self):
         """return dictionary representation of the vector"""
-        return dict( zip( list('xy'), self.coords ) )
+        return dict( zip( ('x','y'), self.coords ) )
 
     def __getitem__(self, key):
         """Treats the vector as a tuple or dict for indexes and slicing.
@@ -44,22 +44,5 @@ class Vector2d(VectorBase):
     def __repr__(self):
         return 'Vector2d(%s, %s)' % self.coords
 
-class Point2d(Vector2d):
-    def __init__(self, *args, **kwargs):
-        super(self.__class__, self).__init__(*args, **kwargs)
-
-    def __repr__(self):
-        return 'Point2d(%s, %s)' % self.coords
-
-    def distanceTo(self, other):
-        """Find the distance between this point and another.
-            >>> p1 = Point3d(-2.2, -0.5, 0.0034)
-            >>> p2 = Point3d(3.45, 0.01, -2004.665)
-            >>> p1.distanceTo(p2)
-            2004.676426897508
-        """
-        return (other - self).length
-
 PageX = Vector2d(1.0, 0.0)
 PageY = Vector2d(0.0, 1.0)
-

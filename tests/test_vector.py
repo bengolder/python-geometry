@@ -104,9 +104,18 @@ class TestVectors(unittest.TestCase):
         v.y = -12
         self.assertEqual( str(v), 'Vector2d(9, -12)')
 
+    def test_vector3d_items(self):
+        v = Vector3d(-3, 6, 19)
+        d = {'x':-3, 'y':6, 'z':19}
+        self.assertEqual( v.z, 19 )
+        self.assertEqualDicts( v.asDict(), d )
+        self.assertEqual( v.toX(-20.5).x, -20.5 )
+        self.assertEqual( v.toY(-20.5).y, -20.5 )
+        self.assertEqual( v.toZ(-20.5).z, -20.5 )
+        v.z = -24
+        self.assertEqual( v['z'], -24 )
+        self.assertEqual( str(v), 'Vector3d(-3, 6, -24)')
 
-    def test_vector2d_operators(self):
-        pass
 
 class TestPoints(TestVectors):
 

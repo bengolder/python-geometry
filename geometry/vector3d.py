@@ -34,10 +34,8 @@ class Vector3d(Vector2d):
     def __getitem__(self, key):
         """Treats the vector as a tuple or dict for indexes and slicing.
         """
-        # dictionary
         if key in ('x','y','z'):
             return self.asDict()[key]
-        # slicing and index calls
         else:
             return self.coords.__getitem__(key)
 

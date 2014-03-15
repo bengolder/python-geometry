@@ -58,8 +58,7 @@ class Interval(object):
         if len( args ) > 1:
             return [(arg - self.start) / self.length for arg in args]
         else:
-            return (self.length * args[0]) + self.start
-        return ( value - self.start ) / self.length
+            return ( args[0] - self.start ) / self.length
 
     def contains( self, value):
         """tests if a value falls within the interval's bounds"""
@@ -135,7 +134,7 @@ class Interval(object):
 
 
 class Scale(object):
-    def __init__(self, domain, range ):
+    def __init__(self, domain=(0.0, 1.0), range=(0.0, 1.0) ):
         self.domain = Interval(*domain)
         self.range = Interval(*range)
 
